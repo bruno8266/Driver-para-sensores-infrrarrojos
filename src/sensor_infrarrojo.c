@@ -54,7 +54,7 @@ uint8_t IR_fast_detect(_SFR_BYTE port, uint8_t port_bit)
 /**
  * @brief Inicialización del modo ADC
  * 
- * @note Se justifica a la izquierda. Por esto se desprecia los 2(dos) bits menos significativos de ADC
+ * @note Se justifica a la izquierda.
  * @note Por esto se desprecia los 2(dos) bits menos significativos de ADC.
  */
 void IR_adc_init()
@@ -63,9 +63,25 @@ void IR_adc_init()
             ~(MASK(REFS1)) | MASK(REFS0); /*Tensión de referencia AVCC*/                       
 }
 
+/**
+ * @brief Lectura de la intensidad de luz recibida por el sensor, utilizando el modo ADC: conversión simple. 
+ * 
+ * @param adc_x Canal utilizado por el sensor, del ADC0 al ADC7.
+ * @return uint8_t ADCH contiene los 8bits más significativos de la conversión (porque justificamos a la izquierda)
+ */
+uint8_t IR_adc_detect(uint8_t adc_x)
+{
+    ADMUX |= MASK(adc_x) & 0b00000111; /*Configuramos el puerto del sensor*/
+    ADCSRA = MASK(ADSC);/*Seteamos ADSC (ADC Start Conversion) para iniciar la conversión*/
+
+    while (ADCSRA && MASK(ADIF) == MASK(ADIF)){}/*Esperamos que la conversion este lista*/
+                                                /*Normalmente la conversión toma 13 ciclos*/
+
+    return ADCH;
+}
 
 /**
- * @brief Lectura del estado del sensor utilizando el modo ADC, conversión simple. 
+ * @brief Lectura del estado del sensor utilizando el modo ADC: conversión simple. 
  * El valor de retorno depende de porcentaje_umbral
  * 
  * @param adc_x Canal utilizado por el sensor, del ADC0 al ADC7.
