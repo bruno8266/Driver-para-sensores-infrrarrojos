@@ -96,6 +96,7 @@ uint8_t IR_slow_detect(uint8_t adc_x, uint8_t porcentaje_umbral)
     ADCSRA = MASK(ADSC);/*Seteamos ADSC para iniciar la conversión*/
 
     while (ADCSRA && MASK(ADIF) == MASK(ADIF)){}/*Esperamos que la conversion este lista*/
+                                                /*Normalmente la conversión toma 13 ciclos*/
 
     if(ADCH >= umbral) /*Comparamos la conversión con el umbral*/
         {return 1; } /*Si la conversión supera al umbral, retorno 1*/
