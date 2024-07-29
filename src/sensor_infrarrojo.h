@@ -20,7 +20,7 @@
  * @param port Puerto a configurar
  * @param port_bit Bit del port a
  */
-void IR_init(_SFR_BYTE ddr, uint8_t ddr_bit, _SFR_BYTE port, uint8_t port_bit)
+void IR_init(_SFR_BYTE ddr, uint8_t ddr_bit, _SFR_BYTE port, uint8_t port_bit);
 
 /**
  * @brief Lee el estado del sensor
@@ -30,7 +30,7 @@ void IR_init(_SFR_BYTE ddr, uint8_t ddr_bit, _SFR_BYTE port, uint8_t port_bit)
  * 
  * @return uint8_t 1 si detecta luz, 0 en caso contrario
  */
-uint8_t IR_fast_detect(_SFR_BYTE port, uint8_t port_bit)
+uint8_t IR_fast_detect(_SFR_BYTE port, uint8_t port_bit);
 
 /**
  * @brief Inicialización del modo ADC
@@ -41,7 +41,15 @@ uint8_t IR_fast_detect(_SFR_BYTE port, uint8_t port_bit)
 void IR_adc_init();
 
 /**
- * @brief Lectura del estado del sensor utilizando el modo ADC, conversión simple. 
+ * @brief Lectura de la intensidad de luz recibida por el sensor, utilizando el modo ADC: conversión simple. 
+ * 
+ * @param adc_x Canal utilizado por el sensor, del ADC0 al ADC7.
+ * @return uint8_t ADCH contiene los 8bits más significativos de la conversión (porque justificamos a la izquierda)
+ */
+uint8_t IR_adc_detect(uint8_t adc_x);
+
+/**
+ * @brief Lectura del estado del sensor utilizando el modo ADC: conversión simple. 
  * El valor de retorno depende de porcentaje_umbral
  * 
  * @param adc_x Canal utilizado por el sensor, del ADC0 al ADC7.
